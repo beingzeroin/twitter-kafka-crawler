@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tweets</title>
+	<style type="text/css">
+		table {
+			border-collapse: collapse;
+		}
+
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<h2>Tweets</h2>
+		<form>
+			<label>
+				<span>Search</span>
+				<input type="text" name="q" {% if search_terms: %}value="{{ search_terms }}"{% endif %}>
+			</label>
+			<button type="submit">Search</button>
+		</form>
+		<div>
+			<table>
+				<tr>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Text</th>
+				</tr>
+				{% for tweet in tweets: %}
+				<tr>
+					{% if search_terms: -%}
+					<td><a href="https://twitter.com/{{ tweet.user_screen_name }}/status/{{ tweet.meta.id }}">{{ tweet.meta.id }}</a></td>
+					<td><a href="{{ url_for('app_user', user_id=tweet.user_id) }}">{{ tweet.user_screen_name }}</a></td>
+					{%- else: -%}
+					<td><a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">{{ tweet.id }}</a></td>
+					<td><a href="{{ url_for('app_user', user_id=tweet.user_id) }}">{{ tweet.user.screen_name }}</a></td>
+					{%- endif %}
+
+					<td>{{ tweet.text }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</body>
+</html>
